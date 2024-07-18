@@ -56,20 +56,9 @@ app.get("/listings/:id", async (req, res) => {
 // Create route
 
 app.post("/listings", async (req, res) => {
-  const newListing = new Listing({
-    ...req.body.listing,
-    image: {
-      filename: req.body.listing.image.filename,
-      url: req.body.listing.image.url,
-    },
-  });
-  console.log("Image URL:", newListing.image); // Debugging
+  const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listings");
-
-  //   const newListing = new Listing(req.body.listing);
-  //   await newListing.save();
-  //   res.redirect("/listings");
 });
 
 //Edit route
