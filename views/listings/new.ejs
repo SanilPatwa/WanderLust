@@ -4,7 +4,7 @@
     <br /><br />
     <h3>Create a new listing</h3>
 
-    <form action="/listings" method="POST">
+    <form action="/listings" method="POST" novalidate class="needs-validation">
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -12,7 +12,10 @@
           placeholder="Enter Title"
           type="text"
           class="form-control"
+          required
         />
+        <div class="valid-feedback">Title looks good!</div>
+        <div class="invalid-feedback">Please enter title</div>
       </div>
 
       <div class="mb-3">
@@ -21,7 +24,9 @@
           name="listing[description]"
           class="form-control"
           type="text"
+          required
         ></textarea>
+        <div class="invalid-feedback">Description cannot be empty</div>
       </div>
 
       <div class="mb-3">
@@ -40,9 +45,10 @@
           <input
             name="listing[price]"
             placeholder="Enter Price"
-            type="number"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Please enter a valid price</div>
         </div>
 
         <div class="mb-3 col-md-8">
@@ -52,7 +58,9 @@
             placeholder="Enter Country"
             type="text"
             class="form-control"
+            required
           />
+          <div class="invalid-feedback">Country cannot be empty</div>
         </div>
       </div>
 
@@ -63,7 +71,9 @@
           placeholder="Enter location"
           type="text"
           class="form-control"
+          required
         />
+        <div class="invalid-feedback">Location cannot be empty</div>
       </div>
 
       <button class="btn btn-success add-btn">Add</button>
