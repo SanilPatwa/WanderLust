@@ -7,8 +7,13 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-const { listingSchema } = require("./schema.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 const Review = require("./models/review.js");
+
+async function main() {
+  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+}
+
 main()
   .then(() => {
     console.log("Connected to db");
@@ -16,12 +21,6 @@ main()
   .catch((err) => {
     console.log(err);
   });
-
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
-
-  // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-}
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -43,7 +42,25 @@ const validateListing = (req, res, next) => {
     next();
   }
 };
-// index route
+
+const validateReview = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    let erMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(404, erMsg);
+  } else {
+    next();
+  }
+};
+
+const trimIdMiddleware = (req, res, next) => {
+  if (req.params.id) {
+    req.params.id = req.params.id.trim();
+  }
+  next();
+};
+
+// Index route
 app.get(
   "/listings",
   wrapAsync(async (req, res) => {
@@ -57,18 +74,17 @@ app.get("/listings/new", (req, res) => {
   res.render("listings/new.ejs");
 });
 
-// show route
+// Show route
 app.get(
   "/listings/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     res.render("listings/show.ejs", { listing });
   })
 );
 
 // Create route
-
 app.post(
   "/listings",
   validateListing,
@@ -79,9 +95,7 @@ app.post(
     console.log(req.body.listing);
   })
 );
-
-//Edit route
-
+// Edit route
 app.get(
   "/listings/:id/edit",
   wrapAsync(async (req, res) => {
@@ -91,7 +105,7 @@ app.get(
   })
 );
 
-// update route
+// Update route
 app.put(
   "/listings/:id",
   validateListing,
@@ -116,42 +130,33 @@ app.delete(
   })
 );
 
+// Reviews - Post route
+app.post(
+  "/listings/:id/reviews",
+  trimIdMiddleware,
+  validateReview,
+  wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    if (!listing) {
+      throw new ExpressError(404, "Listing not found");
+    }
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    res.redirect(`/listings/${listing._id}`);
+  })
+);
+
+// Handle 404 Errors
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page not found"));
 });
 
-// Reviews
-// Post Route
-app.post("/listings/:id/reviews", async (req, res) => {
-  let listing = await Listing.findById(req.params.id);
-  let newReview = new Review(req.body.review);
-
-  listing.reviews.push(newReview);
-
-  await newReview.save();
-  await listing.save();
-
-  console.log("new Review saved");
-  res.send("New review saved");
-});
-
-// app.get("/testListing", async (req, res) => {
-//   let sampleListing = new Listing({
-//     title: "My new villa",
-//     description: "By the Beach",
-//     price: 1200,
-//     location: "Jabalpur",
-//     country: "India",
-//   });
-//   await sampleListing.save();
-//   console.log("Document was saved");
-//   res.send("Successful testing");
-// });
-
+// Error handling middleware
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something Went Wrong" } = err;
   res.status(statusCode).render("error.ejs", { message });
-  // res.status(statusCode).send(message);
 });
 
 app.listen(8080, () => {
