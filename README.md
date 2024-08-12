@@ -1,4 +1,4 @@
-Wanderlust
+
 Wanderlust is a full-stack web application, designed to connect travelers with unique accommodations around the world. Whether you're looking for a cozy apartment in the city, a rustic cabin in the woods, or a luxurious villa by the beach, Wanderlust makes it easy to find and book the perfect stay.
 
 Features
