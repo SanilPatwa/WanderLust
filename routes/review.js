@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router({ mergeParams: true });
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
-const { reviewSchema } = require("../schema.js");
+const {
+  validateReview,
+  isLoggedIn,
+  isReviewAuthor,
+} = require("../middleware.js");
 const Review = require("../models/review.js");
 const Listing = require("../models/listing.js");
 
@@ -13,20 +17,11 @@ const trimIdMiddleware = (req, res, next) => {
   next();
 };
 
-const validateReview = (req, res, next) => {
-  const { error } = reviewSchema.validate(req.body);
-  if (error) {
-    let erMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(404, erMsg);
-  } else {
-    next();
-  }
-};
-
 // Reviews - Post route
 router.post(
   "/",
   trimIdMiddleware,
+  isLoggedIn,
   validateReview,
   wrapAsync(async (req, res) => {
     console.log(req.params.id);
@@ -35,6 +30,7 @@ router.post(
       throw new ExpressError(404, "Listing not found");
     }
     let newReview = new Review(req.body.review);
+    newReview.author = req.user._id;
     listing.reviews.push(newReview);
     await newReview.save();
     await listing.save();
@@ -46,6 +42,8 @@ router.post(
 // Delete review route
 router.delete(
   "/:reviewId",
+  isLoggedIn,
+  isReviewAuthor,
   wrapAsync(async (req, res) => {
     let { id, reviewId } = req.params;
 
