@@ -1,32 +1,53 @@
 
 Wanderlust is a full-stack web application, designed to connect travelers with unique accommodations around the world. Whether you're looking for a cozy apartment in the city, a rustic cabin in the woods, or a luxurious villa by the beach, Wanderlust makes it easy to find and book the perfect stay.
 
-Features
-User Authentication
-Sign Up & Login: Users can create an account and log in securely.
-Listings
-Browse Listings: View a wide range of accommodations with detailed descriptions, photos, and reviews.
-Search & Filter: Easily search for listings based on location, price, amenities, and more.
-Host Listings: Users can become hosts and create, update, or delete their own listings.
-Booking
-Instant Booking: Book accommodations instantly or request to book.
-Booking Management: View and manage your bookings in one place.
-Calendar Integration: Check availability and synchronize bookings with your calendar.
-Reviews & Ratings
-Write Reviews: Leave reviews and ratings for your stays.
-Read Reviews: Browse reviews from other travelers to make informed decisions.
++
+Tech Stack: MERN (MongoDB, Express.js, React, Node.js)
+Architecture: MVC (Model-View-Controller)
+Key Features
+* User Registration and Authentication
+* Secure user registration and login system.
 
+Property Listings:
 
-Dashboard: Access your bookings, listings, reviews, and messages from a personalized dashboard.
-Technologies Used
-Frontend
-HTML, CSS, JavaScript: Core web technologies for building the user interface.
-React: A JavaScript library for building dynamic, interactive user interfaces.
-Bootstrap: A CSS framework for responsive design and pre-styled components.
-Backend
-Node.js: A JavaScript runtime for building server-side applications.
-Express: A web application framework for Node.js.
-MongoDB: A NoSQL database for storing user and listing data.
-Mongoose: An ODM (Object Data Modeling) library for MongoDB and Node.js.
-Authentication
-Passport.js: Middleware for authentication in Node.js applications.
+* Hosts can add, update, and delete their property listings.
+* Properties include details like location, price, amenities, and images.
+
+User Reviews and Ratings:
+
+* Users can leave reviews and ratings for properties they have stayed in.
+
+Admin Dashboard:
+
+* Admins can manage users, properties, and bookings.
+* Analytics and reports on platform usage and performance.
+
+Backend (Node.js and Express.js)
+API Development:
+* RESTful APIs to handle CRUD operations for users, properties, and bookings.
+* Middleware for authentication and authorization.
+  
+Database (MongoDB):
+
+* Schema design for users, properties, bookings, and reviews.
+* Efficient querying and indexing for performance optimization.
+* 
+Frontend (React)
+User Interface:
+
+Responsive and user-friendly design.
+Separate dashboards for users, hosts, and admins.
+State Management:
+
+Redux for managing application state.
+React hooks for component-level state and effects.
+Routing:
+
+React Router for navigation between different pages and components.
+Deployment and Maintenance
+Deployment:
+
+Deployed on cloud platforms like AWS or Heroku.
+Continuous integration and deployment (CI/CD) setup for smooth updates.
+Maintenance:
+
