@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
+console.log(process.env.SECRET);
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -17,9 +23,7 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
-}
+const dbUrl = process.env.ATLASDB_URL;
 
 main()
   .then(() => {
@@ -29,6 +33,9 @@ main()
     console.log(err);
   });
 
+async function main() {
+  await mongoose.connect(dbUrl);
+}
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
@@ -47,9 +54,9 @@ const sessionOptions = {
   },
 };
 
-app.get("/", (req, res) => {
-  res.send("This is home page");
-});
+// app.get("/", (req, res) => {
+//   res.send("This is home page");
+// });
 
 app.use(session(sessionOptions));
 app.use(flash());

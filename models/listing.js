@@ -11,13 +11,8 @@ const listingSchema = new Schema({
   description: String,
 
   image: {
-    type: String,
-    default:
-      "https://unsplash.com/photos/a-model-of-a-house-with-a-car-parked-in-front-of-it-TD5d-_Mw3xY",
-    set: (v) =>
-      v === ""
-        ? "https://unsplash.com/photos/a-model-of-a-house-with-a-car-parked-in-front-of-it-TD5d-_Mw3xY"
-        : v,
+    url: String,
+    filename: String,
   },
   price: Number,
   location: String,
