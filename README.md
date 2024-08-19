@@ -31,23 +31,7 @@ Database (MongoDB):
 
 * Schema design for users, properties, bookings, and reviews.
 * Efficient querying and indexing for performance optimization.
-* 
-Frontend (React)
-User Interface:
 
-Responsive and user-friendly design.
-Separate dashboards for users, hosts, and admins.
-State Management:
 
-Redux for managing application state.
-React hooks for component-level state and effects.
-Routing:
-
-React Router for navigation between different pages and components.
-Deployment and Maintenance
-Deployment:
-
-Deployed on cloud platforms like AWS or Heroku.
-Continuous integration and deployment (CI/CD) setup for smooth updates.
-Maintenance:
+  Some features are not responsive.
 
